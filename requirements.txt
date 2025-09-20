@@ -6,3 +6,4 @@ python-dotenv==1.0.0
 schedule==1.2.0
 setuptools==68.2.2
 wheel==0.41.3
+aiohttp==3.9.5
