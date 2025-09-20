@@ -44,6 +44,12 @@ from telegram.ext import (
     ContextTypes,
 )
 
+# Добавьте в импорты
+try:
+    from flask import Flask
+except ImportError:
+    pass
+
 # ----------------------
 # Load env
 # ----------------------
@@ -748,7 +754,9 @@ def main():
     account = Account(START_CAPITAL)
 
     logger.info("Bot start RUN_ID=%s MODE=%s CONTRACT=%s", RUN_ID, MODE, CONTRACT_CODE)
-    
+
+def run_bot():
+    """Запуск телеграм бота"""
     try:
         application.run_polling()
     except KeyboardInterrupt:
@@ -756,5 +764,31 @@ def main():
     finally:
         save_trade_logs()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    # Инициализируем бота
     main()
+    
+    # Для Render web сервиса
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Запускаем бота в отдельном потоке
+    import threading
+    bot_thread = threading.Thread(target=run_bot)
+    bot_thread.daemon = True
+    bot_thread.start()
+    
+    # Простой HTTP сервер для Render
+    from flask import Flask
+    web_app = Flask(__name__)
+    
+    @web_app.route('/')
+    def home():
+        return "Trading Bot is running!"
+    
+    @web_app.route('/health')
+    def health():
+        return "OK"
+    
+    print(f"Server starting on port {port}")
+    web_app.run(host='0.0.0.0', port=port)
