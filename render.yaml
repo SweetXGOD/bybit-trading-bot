@@ -1,3 +1,4 @@
+# version: 3.0 - Flask removed, using built-in HTTP server
 services:
   - type: web
     name: bybit-trading-bot
