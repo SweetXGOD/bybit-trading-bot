@@ -6,7 +6,6 @@ services:
     plan: free
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: python app.py
-    pythonVersion: "3.10.12"
     envVars:
       # Bot & mode
       - key: TELEGRAM_BOT_TOKEN
@@ -75,9 +74,3 @@ services:
     # Health check to prevent sleep on free plan
     healthCheckPath: /health
     autoDeploy: true
-
-# Create data directory for logs and files
-disk:
-  name: data
-  mountPath: /data
-  sizeGB: 1
