@@ -1,11 +1,12 @@
-# version: 3.0 - Flask removed, using built-in HTTP server
+# version: 3.1 - Updated for Python 3.13 compatibility
 services:
   - type: web
     name: bybit-trading-bot
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: python app.py
+    pythonVersion: "3.10.12"
     envVars:
       # Bot & mode
       - key: TELEGRAM_BOT_TOKEN
@@ -13,13 +14,13 @@ services:
       - key: TELEGRAM_CHAT_ID
         sync: false
       - key: MODE
-        value: "LIVE"  # ← ИЗМЕНИТЬ
+        value: "LIVE"
       - key: ALLOW_LIVE
-        value: "1"     # ← ИЗМЕНИТЬ
+        value: "1"
       - key: MIN_CAPITAL_FOR_LIVE
         value: "11"
       - key: DRY_RUN_LIVE
-        value: "0"     # ← ИЗМЕНИТЬ
+        value: "0"
       
       # Bybit API
       - key: BYBIT_API_KEY
@@ -31,11 +32,11 @@ services:
       - key: CONTRACT_CODE
         value: "BTCUSDT"
       - key: START_CAPITAL
-        value: "9.0"   # ← ИЗМЕНИТЬ
+        value: "9.0"
       - key: RISK_PERCENT
         value: "0.5"
       - key: LEVERAGE
-        value: "15"    # ← ИЗМЕНИТЬ
+        value: "15"
       - key: RSI_PERIOD
         value: "14"
       - key: SMA_PERIOD
@@ -65,6 +66,18 @@ services:
       
       # Misc
       - key: DATA_DIR
-        value: "."
+        value: "data"
       - key: API_HOST
         value: "api.bybit.com"
+      - key: PYTHON_VERSION
+        value: "3.10.12"
+    
+    # Health check to prevent sleep on free plan
+    healthCheckPath: /health
+    autoDeploy: true
+
+# Create data directory for logs and files
+disk:
+  name: data
+  mountPath: /data
+  sizeGB: 1
