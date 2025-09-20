@@ -1,0 +1,69 @@
+services:
+  - type: worker
+    name: bybit-trading-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      # Bot & mode
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: MODE
+        value: "LIVE"  # ← ИЗМЕНИТЬ
+      - key: ALLOW_LIVE
+        value: "1"     # ← ИЗМЕНИТЬ
+      - key: MIN_CAPITAL_FOR_LIVE
+        value: "11"
+      - key: DRY_RUN_LIVE
+        value: "0"     # ← ИЗМЕНИТЬ
+      
+      # Bybit API
+      - key: BYBIT_API_KEY
+        sync: false
+      - key: BYBIT_API_SECRET
+        sync: false
+      
+      # Strategy & risk
+      - key: CONTRACT_CODE
+        value: "BTCUSDT"
+      - key: START_CAPITAL
+        value: "9.0"   # ← ИЗМЕНИТЬ
+      - key: RISK_PERCENT
+        value: "0.5"
+      - key: LEVERAGE
+        value: "15"    # ← ИЗМЕНИТЬ
+      - key: RSI_PERIOD
+        value: "14"
+      - key: SMA_PERIOD
+        value: "200"
+      - key: STOP_LOSS_PCT
+        value: "0.02"
+      - key: TAKE_PROFIT_PCT
+        value: "0.04"
+      - key: DAILY_LOSS_LIMIT_PCT
+        value: "10.0"
+      - key: MAX_TRADES_PER_DAY
+        value: "50"
+      - key: MIN_TRADE_USD
+        value: "0.1"
+      
+      # Donation system
+      - key: DONATION_ENABLED
+        value: "1"
+      - key: DONATION_PERCENT
+        value: "5"
+      - key: DONATION_LOG_FILE
+        value: "donations.log"
+      - key: DONATION_PENDING_FILE
+        value: "donations_pending.json"
+      - key: DONATION_NOTIFY
+        value: "1"
+      
+      # Misc
+      - key: DATA_DIR
+        value: "."
+      - key: API_HOST
+        value: "api.bybit.com"
